@@ -1,2 +1,4 @@
-.dub/
-dub.userprefs
+project/target/
+target/
+
+.idea

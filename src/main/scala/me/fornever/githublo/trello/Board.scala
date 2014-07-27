@@ -4,7 +4,10 @@ import scala.collection.JavaConversions._
 import me.fornever.githublo.github.Issue
 import org.trello4j.{Trello, TrelloImpl}
 
-class Board(boardId: String, key: String) {
+class Board(boardId: String, listId: String, key: String) {
+
+  val titleRegex = """GH#(\d+)""".r
+  val maxChangesPerSession = 5
 
   def loadCards(): Stream[Card] = {
     val trello: Trello = new TrelloImpl(key)
@@ -12,8 +15,36 @@ class Board(boardId: String, key: String) {
     Stream(cards: _*).map(Card.from)
   }
 
-  def updateCards(issues: Stream[Issue], cards: Stream[Card]) {
-    throw new NotImplementedError()
+  def updateCards(issues: Stream[Issue], cards: Stream[Card]): Int = {
+    val cardMap = cardsByGithubId(cards)
+
+    var createdCards = 0
+    for (issue <- issues) {
+      cardMap.get(issue.id) match {
+        case Some(card) => // TODO: Update card based on github status
+        case None =>
+          createCard(issue)
+          createdCards += 1
+          if (createdCards >= maxChangesPerSession) {
+            return createdCards
+          }
+      }
+    }
+
+    createdCards
+  }
+
+  private def cardsByGithubId(cards: Stream[Card]): Map[Int, Card] = {
+    (cards map { card => (card.title, card)} collect { case (titleRegex(number), card) => (number.toInt, card)}).toMap
+  }
+
+  private def createCard(issue: Issue) {
+    val trello: Trello = new TrelloImpl(key)
+    trello.createCard(listId, getCardName(issue), null)
+  }
+
+  private def getCardName(issue: Issue): String = {
+    s"GH#${issue.id}: ${issue.name}"
   }
 
 }

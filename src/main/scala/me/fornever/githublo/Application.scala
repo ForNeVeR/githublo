@@ -7,21 +7,22 @@ object Application extends App {
 
   override def main(args: Array[String]) {
     args match {
-      case Array(owner, repo, board, key) =>
-        exportIssues(owner, repo, board, key)
+      case Array(owner, repo, board, list, key) =>
+        exportIssues(owner, repo, board, list, key)
       case _ =>
         printUsage()
     }
   }
 
-  def exportIssues(owner: String, repo: String, board: String, key: String) {
+  def exportIssues(owner: String, repo: String, board: String, list: String, key: String) {
     val github = new IssueImporter(owner, repo)
-    val trello = new Board(board, key)
+    val trello = new Board(board, list, key)
 
     val issues = github.loadIssues()
     val cards = trello.loadCards()
 
-    trello.updateCards(issues, cards)
+    val result = trello.updateCards(issues, cards)
+    println(s"Successfully updated $result cards")
   }
 
   def printUsage() {

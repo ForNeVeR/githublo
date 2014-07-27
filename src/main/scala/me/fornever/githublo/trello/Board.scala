@@ -8,7 +8,7 @@ import org.trello4j.{Trello, TrelloImpl}
 
 class Board(boardId: String, listId: String, key: String, token: String) {
 
-  val titleRegex = """GH#(\d+)""".r
+  val titleRegex = """^GH#(\d+).*$""".r
   val maxChangesPerSession = 5
 
   def loadCards(): Stream[Card] = {

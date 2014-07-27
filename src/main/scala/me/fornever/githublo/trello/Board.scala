@@ -1,16 +1,18 @@
 package me.fornever.githublo.trello
 
+import java.util
+
 import scala.collection.JavaConversions._
 import me.fornever.githublo.github.Issue
 import org.trello4j.{Trello, TrelloImpl}
 
-class Board(boardId: String, listId: String, key: String) {
+class Board(boardId: String, listId: String, key: String, token: String) {
 
   val titleRegex = """GH#(\d+)""".r
   val maxChangesPerSession = 5
 
   def loadCards(): Stream[Card] = {
-    val trello: Trello = new TrelloImpl(key)
+    val trello: Trello = new TrelloImpl(key, token)
     val cards = trello.getCardsByBoard(boardId)
     Stream(cards: _*).map(Card.from)
   }
@@ -39,8 +41,10 @@ class Board(boardId: String, listId: String, key: String) {
   }
 
   private def createCard(issue: Issue) {
-    val trello: Trello = new TrelloImpl(key)
-    trello.createCard(listId, getCardName(issue), null)
+    val trello: Trello = new TrelloImpl(key, token)
+    val parameters = new util.HashMap[String, Object]()
+    parameters.put("due", "")
+    trello.createCard(listId, getCardName(issue), parameters)
   }
 
   private def getCardName(issue: Issue): String = {

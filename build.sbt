@@ -6,7 +6,7 @@ mainClass in (Compile, run) := Some("me.fornever.githublo.Application")
 
 scalaVersion := "2.11.0"
 
-resolvers += "trello4j" at "https://raw.github.com/joelso/joelso-mvn-repo/master/snapshots/"
+resolvers += "Local Maven Repository" at "file:///"+Path.userHome.absolutePath+"/.m2/repository"
 
 libraryDependencies ++= Seq(
   "org.eclipse.mylyn.github" % "org.eclipse.egit.github.core" % "2.1.5",

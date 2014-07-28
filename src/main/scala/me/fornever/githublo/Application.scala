@@ -26,7 +26,7 @@ object Application extends App {
   }
 
   def printUsage() {
-    println("githublo owner repo trelloBoardId trelloListId trelloAPIKey trelloAPIToken")
+    println("Command line arguments: github-user github-repository trello-board-id trello-list-id trello-api-key trello-api-token")
   }
 
 }

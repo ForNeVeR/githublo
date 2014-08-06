@@ -1,3 +1,5 @@
+seq(clojure.settings :_*)
+
 name := "githublo"
 
 version := "0.1"
@@ -10,5 +12,6 @@ resolvers += "Local Maven Repository" at "file:///"+Path.userHome.absolutePath+"
 
 libraryDependencies ++= Seq(
   "org.eclipse.mylyn.github" % "org.eclipse.egit.github.core" % "2.1.5",
-  "org.trello4j" % "trello4j" % "1.0-SNAPSHOT"
+  "org.trello4j" % "trello4j" % "1.0-SNAPSHOT",
+  "org.clojure" % "clojure" % "1.5.1"
 )

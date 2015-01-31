@@ -24,11 +24,11 @@ class FXApplication extends Application {
 
   private var stage: scalafx.stage.Stage = _
   private def root = FXMLView(getClass.getResource("/fxml/SettingsForm.fxml"), new ComplexDependencyResolver(
-    new DependenciesByType(Map(
-      typeOf[HostServices] -> getHostServices
-    )),
     new ExplicitDependencies(Map(
       "primaryStage" -> stage
+    )),
+    new DependenciesByType(Map(
+      typeOf[HostServices] -> getHostServices
     ))))
 
   private def createScene(view: Parent) = {

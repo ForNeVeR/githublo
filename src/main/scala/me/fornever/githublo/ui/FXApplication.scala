@@ -4,6 +4,8 @@ import javafx.application.{Application, HostServices}
 import javafx.scene.Parent
 import javafx.stage.Stage
 
+import me.fornever.githublo.common.Configuration
+
 import scala.reflect.runtime.universe._
 import scalafx.Includes._
 import scalafx.scene.Scene
@@ -28,7 +30,8 @@ class FXApplication extends Application {
       "primaryStage" -> stage
     )),
     new DependenciesByType(Map(
-      typeOf[HostServices] -> getHostServices
+      typeOf[HostServices] -> getHostServices,
+      typeOf[Configuration] -> Configuration()
     ))))
 
   private def createScene(view: Parent) = {

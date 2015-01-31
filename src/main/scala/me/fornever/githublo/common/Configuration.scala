@@ -4,18 +4,22 @@ import java.util.Properties
 
 case class Configuration(trelloApiKey: String) {
 
-  def saveTo(properties: Properties): Unit = {
+  def toProperties = {
+    val properties = new Properties()
     properties.setProperty(Configuration.TrelloApiKey, trelloApiKey)
+    properties
   }
 
 }
 
 object Configuration {
 
-  private val TrelloApiKey = "trello.apiKey"
+  def apply(): Configuration = Configuration("")
 
   def loadFrom(properties: Properties) = {
     Configuration(properties.getProperty(TrelloApiKey, ""))
   }
+
+  private val TrelloApiKey = "trello.apiKey"
 
 }

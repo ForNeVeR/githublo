@@ -1,6 +1,6 @@
 package me.fornever.githublo.ui
 
-import java.io.{File, FileInputStream}
+import java.io.{FileOutputStream, File, FileInputStream}
 import java.util.Properties
 import javafx.application.HostServices
 
@@ -16,17 +16,19 @@ import resource._
 @sfxml
 class SettingsFormPresenter(primaryStage: Stage,
                             private val hostServices: HostServices,
-                            private val trelloApiKeyField: TextField) {
+                            private val trelloApiKeyField: TextField,
+                            private var configuration: Configuration) {
 
   private val TrelloApiKeyUrl = "https://trello.com/1/appKey/generate"
   var trelloApiKey = new StringProperty()
 
-  trelloApiKeyField.text <== trelloApiKey
+  trelloApiKeyField.text <==> trelloApiKey
 
   def getTrelloApiKey(): Unit = {
     hostServices.showDocument(TrelloApiKeyUrl)
   }
 
+  // TODO: Partially (?) block the UI while working with files
   def loadFromFile(): Unit = {
     import FXExecutor.executor
     val dialog = new FileChooser {
@@ -35,8 +37,9 @@ class SettingsFormPresenter(primaryStage: Stage,
 
     Option(dialog.showOpenDialog(primaryStage)) match {
       case Some(file) => async {
-        val configuration = await(loadConfiguration(file))
-        updateConfigurationData(configuration)
+        await(loadConfiguration(file))
+
+        trelloApiKey.value = configuration.trelloApiKey
       }
 
       case None =>
@@ -44,7 +47,20 @@ class SettingsFormPresenter(primaryStage: Stage,
   }
 
   def saveToFile(): Unit = {
+    import FXExecutor.executor
+    val dialog = new FileChooser {
+      title = "Select File"
+    }
 
+    Option(dialog.showSaveDialog(primaryStage)) match {
+      case Some(file) => async {
+        configuration = Configuration(trelloApiKey.value)
+
+        await(saveConfiguration(file))
+      }
+
+      case None =>
+    }
   }
 
   private def loadConfiguration(file: File) = async {
@@ -52,12 +68,14 @@ class SettingsFormPresenter(primaryStage: Stage,
       val properties = new Properties()
       properties.load(stream)
 
-      Configuration.loadFrom(properties)
+      configuration = Configuration.loadFrom(properties)
     }
   }(scala.concurrent.ExecutionContext.Implicits.global)
 
-  private def updateConfigurationData(configuration: Configuration): Unit = {
-    trelloApiKey.value = configuration.trelloApiKey
-  }
+  private def saveConfiguration(file: File) = async {
+    managed(new FileOutputStream(file)) acquireAndGet { stream =>
+      configuration.toProperties.store(stream, "")
+    }
+  }(scala.concurrent.ExecutionContext.Implicits.global)
 
 }

@@ -15,4 +15,12 @@ class SettingsFormPresenter(private val hostServices: HostServices,
     hostServices.showDocument(TrelloApiKeyUrl)
   }
 
+  def loadFromFile(): Unit = {
+
+  }
+
+  def saveToFile(): Unit = {
+
+  }
+
 }

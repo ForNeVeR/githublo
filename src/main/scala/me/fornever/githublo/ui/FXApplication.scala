@@ -10,14 +10,18 @@ import scalafxml.core.{DependenciesByType, FXMLView}
 
 class FXApplication extends Application {
 
-  def root = FXMLView(getClass.getResource("settings.fxml"), new DependenciesByType(Map(
+  def root = FXMLView(getClass.getResource("/fxml/SettingsForm.fxml"), new DependenciesByType(Map(
     typeOf[HostServices] -> getHostServices
   )))
 
   override def start(primaryStage: Stage): Unit = {
     val stage = new scalafx.stage.Stage(primaryStage) {
       title = "Githublo"
-      scene = new Scene(root)
+      scene = {
+        val s = new Scene(root)
+        s.stylesheets.add("/css/main.css")
+        s
+      }
     }
 
     stage.show()

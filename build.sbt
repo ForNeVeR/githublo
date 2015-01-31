@@ -1,3 +1,5 @@
+seq(lessSettings: _*)
+
 name := "githublo"
 
 version := "0.1"

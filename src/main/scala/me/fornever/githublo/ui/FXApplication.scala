@@ -1,31 +1,42 @@
 package me.fornever.githublo.ui
 
 import javafx.application.{Application, HostServices}
+import javafx.scene.Parent
 import javafx.stage.Stage
 
 import scala.reflect.runtime.universe._
 import scalafx.Includes._
 import scalafx.scene.Scene
-import scalafxml.core.{DependenciesByType, FXMLView}
+import scalafxml.core.{FXMLView, ExplicitDependencies, DependenciesByType}
 
 class FXApplication extends Application {
 
-  def root = FXMLView(getClass.getResource("/fxml/SettingsForm.fxml"), new DependenciesByType(Map(
-    typeOf[HostServices] -> getHostServices
-  )))
-
   override def start(primaryStage: Stage): Unit = {
-    val stage = new scalafx.stage.Stage(primaryStage) {
+    stage = new scalafx.stage.Stage(primaryStage) {
       title = "Githublo"
-      scene = {
-        val s = new Scene(root)
-        s.stylesheets.add("/css/main.css")
-        s
-      }
+      scene = createScene(root)
     }
 
-    stage.show()
+    primaryStage.show()
   }
+
+  private val Stylesheet = "/css/main.css"
+
+  private var stage: scalafx.stage.Stage = _
+  private def root = FXMLView(getClass.getResource("/fxml/SettingsForm.fxml"), new ComplexDependencyResolver(
+    new DependenciesByType(Map(
+      typeOf[HostServices] -> getHostServices
+    )),
+    new ExplicitDependencies(Map(
+      "primaryStage" -> stage
+    ))))
+
+  private def createScene(view: Parent) = {
+    val scene = new Scene(view)
+    scene.stylesheets.add(Stylesheet)
+    scene
+  }
+
 }
 
 object FXApplication {

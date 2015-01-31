@@ -2,13 +2,16 @@ name := "githublo"
 
 version := "0.1"
 
-mainClass in (Compile, run) := Some("me.fornever.githublo.Application")
+mainClass in (Compile, run) := Some("me.fornever.githublo.ui.FXApplication")
 
-scalaVersion := "2.11.0"
+scalaVersion := "2.11.5"
 
 resolvers += "Local Maven Repository" at "file:///"+Path.userHome.absolutePath+"/.m2/repository"
 
+addCompilerPlugin("org.scalamacros" % "paradise" % "2.0.1" cross CrossVersion.full)
+
 libraryDependencies ++= Seq(
   "org.eclipse.mylyn.github" % "org.eclipse.egit.github.core" % "2.1.5",
+  "org.scalafx" %% "scalafxml-core-sfx8" % "0.2.2",
   "org.trello4j" % "trello4j" % "1.0-SNAPSHOT"
 )

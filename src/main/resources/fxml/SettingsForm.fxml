@@ -20,22 +20,35 @@
                         text="Get Key"
                         onAction="#getTrelloApiKey"/>
 
-                <GridPane GridPane.rowIndex="2" GridPane.columnIndex="1" GridPane.columnSpan="2" styleClass="buttonBar">
+                <GridPane GridPane.rowIndex="1" GridPane.columnIndex="1" GridPane.columnSpan="2" styleClass="buttonBar">
                     <children>
-                        <Button GridPane.columnIndex="0" text="Load Settings..." onAction="#loadFromFile"/>
-                        <Button GridPane.columnIndex="1" text="Save Settings As..." onAction="#saveToFile"/>
+                        <Button fx:id="loadButton"
+                                GridPane.columnIndex="0"
+                                text="Load Settings..."
+                                onAction="#loadFromFile"/>
+                        <Button fx:id="saveButton"
+                                GridPane.columnIndex="1"
+                                text="Save Settings As..."
+                                onAction="#saveToFile"/>
                     </children>
                     <columnConstraints>
                         <ColumnConstraints halignment="RIGHT" hgrow="ALWAYS"/>
                         <ColumnConstraints halignment="LEFT" hgrow="ALWAYS"/>
                     </columnConstraints>
                 </GridPane>
+
+                <Label GridPane.rowIndex="2" fx:id="statusLabel"/>
             </children>
             <columnConstraints>
                 <ColumnConstraints halignment="RIGHT" minWidth="60.0"/>
                 <ColumnConstraints hgrow="ALWAYS" prefWidth="100.0"/>
                 <ColumnConstraints halignment="LEFT" prefWidth="60.0"/>
             </columnConstraints>
+            <rowConstraints>
+                <RowConstraints/>
+                <RowConstraints/>
+                <RowConstraints vgrow="ALWAYS" valignment="BOTTOM"/>
+            </rowConstraints>
         </GridPane>
     </children>
 </StackPane>

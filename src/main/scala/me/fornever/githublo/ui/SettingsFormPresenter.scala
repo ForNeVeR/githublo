@@ -7,28 +7,45 @@ import javafx.application.HostServices
 import me.fornever.githublo.common.Configuration
 
 import scala.async.Async.{async, await}
+import scala.concurrent.Future
 import scalafx.beans.property.StringProperty
-import scalafx.scene.control.TextField
+import scalafx.scene.control.{Button, Label, TextField}
 import scalafx.stage.{FileChooser, Stage}
 import scalafxml.core.macros.sfxml
 import resource._
 
 @sfxml
 class SettingsFormPresenter(primaryStage: Stage,
+                            private var configuration: Configuration,
                             private val hostServices: HostServices,
                             private val trelloApiKeyField: TextField,
-                            private var configuration: Configuration) {
+                            private val loadButton: Button,
+                            private val saveButton: Button,
+                            private val statusLabel: Label) {
 
   private val TrelloApiKeyUrl = "https://trello.com/1/appKey/generate"
-  var trelloApiKey = new StringProperty()
+  val trelloApiKey = new StringProperty()
+  val status = new StringProperty("test test")
 
   trelloApiKeyField.text <==> trelloApiKey
+  statusLabel.text <== status
+
+  val controls = List(loadButton, saveButton)
 
   def getTrelloApiKey(): Unit = {
     hostServices.showDocument(TrelloApiKeyUrl)
   }
 
-  // TODO: Partially (?) block the UI while working with files
+  def blockUi(message: String)(action: Future[Unit]) = async {
+    status.value = message
+    controls.foreach(_.disable = true)
+
+    await(action)
+
+    controls.foreach(_.disable = false)
+    status.value = ""
+  }(FXExecutor.executor)
+
   def loadFromFile(): Unit = {
     import FXExecutor.executor
     val dialog = new FileChooser {
@@ -36,11 +53,11 @@ class SettingsFormPresenter(primaryStage: Stage,
     }
 
     Option(dialog.showOpenDialog(primaryStage)) match {
-      case Some(file) => async {
+      case Some(file) => blockUi("Loading data...")(async {
         await(loadConfiguration(file))
 
         trelloApiKey.value = configuration.trelloApiKey
-      }
+      })
 
       case None =>
     }
@@ -53,11 +70,11 @@ class SettingsFormPresenter(primaryStage: Stage,
     }
 
     Option(dialog.showSaveDialog(primaryStage)) match {
-      case Some(file) => async {
+      case Some(file) => blockUi("Saving data...")(async {
         configuration = Configuration(trelloApiKey.value)
 
         await(saveConfiguration(file))
-      }
+      })
 
       case None =>
     }

@@ -19,21 +19,31 @@ class SettingsFormPresenter(primaryStage: Stage,
                             private var configuration: Configuration,
                             private val hostServices: HostServices,
                             private val trelloApiKeyField: TextField,
+                            private val trelloTokenField: TextField,
                             private val loadButton: Button,
                             private val saveButton: Button,
                             private val statusLabel: Label) {
 
   private val TrelloApiKeyUrl = "https://trello.com/1/appKey/generate"
+
   val trelloApiKey = new StringProperty()
-  val status = new StringProperty("test test")
+  val trelloToken = new StringProperty()
+  val status = new StringProperty()
 
   trelloApiKeyField.text <==> trelloApiKey
+  trelloTokenField.text <==> trelloToken
   statusLabel.text <== status
 
   val controls = List(loadButton, saveButton)
 
   def getTrelloApiKey(): Unit = {
     hostServices.showDocument(TrelloApiKeyUrl)
+  }
+
+  def getTrelloToken(): Unit = {
+    val apiKey = trelloApiKey.value
+    val url = s"https://trello.com/1/authorize?key=$apiKey&name=Githublo&expiration=never&response_type=token&scope=read,write"
+    hostServices.showDocument(url)
   }
 
   def blockUi(message: String)(action: Future[Unit]) = async {
@@ -71,7 +81,7 @@ class SettingsFormPresenter(primaryStage: Stage,
 
     Option(dialog.showSaveDialog(primaryStage)) match {
       case Some(file) => blockUi("Saving data...")(async {
-        configuration = Configuration(trelloApiKey.value)
+        configuration = Configuration(trelloApiKey.value, trelloToken.value)
 
         await(saveConfiguration(file))
       })

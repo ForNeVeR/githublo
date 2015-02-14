@@ -20,7 +20,15 @@
                         text="Get Key"
                         onAction="#getTrelloApiKey"/>
 
-                <GridPane GridPane.rowIndex="1" GridPane.columnIndex="1" GridPane.columnSpan="2" styleClass="buttonBar">
+                <Label GridPane.rowIndex="1" text="Trello Token: "/>
+                <TextField fx:id="trelloTokenField" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+                <Button GridPane.rowIndex="1"
+                        GridPane.columnIndex="2"
+                        styleClass="toolButton"
+                        text="Get Token"
+                        onAction="#getTrelloToken"/>
+
+                <GridPane GridPane.rowIndex="2" GridPane.columnIndex="1" GridPane.columnSpan="2" styleClass="buttonBar">
                     <children>
                         <Button fx:id="loadButton"
                                 GridPane.columnIndex="0"
@@ -37,14 +45,15 @@
                     </columnConstraints>
                 </GridPane>
 
-                <Label GridPane.rowIndex="2" fx:id="statusLabel"/>
+                <Label GridPane.rowIndex="3" fx:id="statusLabel"/>
             </children>
             <columnConstraints>
                 <ColumnConstraints halignment="RIGHT" minWidth="60.0"/>
                 <ColumnConstraints hgrow="ALWAYS" prefWidth="100.0"/>
-                <ColumnConstraints halignment="LEFT" prefWidth="60.0"/>
+                <ColumnConstraints halignment="LEFT" prefWidth="100.0"/>
             </columnConstraints>
             <rowConstraints>
+                <RowConstraints/>
                 <RowConstraints/>
                 <RowConstraints/>
                 <RowConstraints vgrow="ALWAYS" valignment="BOTTOM"/>

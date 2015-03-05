@@ -17,11 +17,15 @@ object Configuration {
 
   def apply(): Configuration = Configuration("", "")
 
-  def loadFrom(properties: Properties) = {
+  def from(properties: Properties) = {
     Configuration(
       properties.getProperty(TrelloApiKey, ""),
       properties.getProperty(TrelloToken, "")
     )
+  }
+
+  def from(content: String): Configuration = {
+    sys.error("not implemented") // TODO: Load and parse Clojure file.
   }
 
   private val TrelloApiKey = "trello.apiKey"

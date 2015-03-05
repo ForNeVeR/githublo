@@ -20,5 +20,6 @@ libraryDependencies ++= Seq(
   "org.eclipse.mylyn.github" % "org.eclipse.egit.github.core" % "2.1.5",
   "org.scala-lang.modules" %% "scala-async" % "0.9.2",
   "org.scalafx" %% "scalafxml-core-sfx8" % "0.2.2",
+  "org.scalatest" %% "scalatest" % "2.2.1" % "test",
   "org.trello4j" % "trello4j" % "1.0-SNAPSHOT"
 )

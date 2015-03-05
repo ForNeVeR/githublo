@@ -1,4 +1,4 @@
-Githublo [![ForNeVeR/githublo](http://issuestats.com/github/ForNeVeR/githublo/badge/pr?style=flat-square)](http://www.issuestats.com/github/ForNeVeR/githublo) [![ForNeVeR/githublo](http://issuestats.com/github/ForNeVeR/githublo/badge/issue?style=flat-square)](http://www.issuestats.com/github/ForNeVeR/githublo) [![BuildStatus](https://travis-ci.org/ForNeVeR/githublo.png?branch=master)](https://travis-ci.org/ForNeVeR/githublo)
+Githublo [![ForNeVeR/githublo](http://issuestats.com/github/ForNeVeR/githublo/badge/pr?style=flat-square)](http://www.issuestats.com/github/ForNeVeR/githublo) [![ForNeVeR/githublo](http://issuestats.com/github/ForNeVeR/githublo/badge/issue?style=flat-square)](http://www.issuestats.com/github/ForNeVeR/githublo) [![BuildStatus](https://travis-ci.org/ForNeVeR/githublo.png?branch=develop)](https://travis-ci.org/ForNeVeR/githublo)
 ========
 
 Githublo is a small tool for synchronizing [Github](https://github.com/) issues with [Trello](https://trello.com) cards.

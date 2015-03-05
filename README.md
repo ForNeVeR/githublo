@@ -1,4 +1,4 @@
-Githublo
+Githublo [![ForNeVeR/githublo](http://issuestats.com/github/ForNeVeR/githublo/badge/pr?style=flat-square)](http://www.issuestats.com/github/ForNeVeR/githublo) [![ForNeVeR/githublo](http://issuestats.com/github/ForNeVeR/githublo/badge/issue?style=flat-square)](http://www.issuestats.com/github/ForNeVeR/githublo)
 ========
 
 Githublo is a small tool for synchronizing [Github](https://github.com/) issues with [Trello](https://trello.com) cards.
@@ -17,7 +17,7 @@ and visit it in browser. Copy the security token from this page.
 Now you want to know identifier of your board. Visit the page
 `https://api.trello.com/1/members/{your_user_name}/boards?key={your_API_key}` (or
 `https://api.trello.com/1/organizations/{your_organization}/boards?key={your_API_key}`) and get identifier from there.
-For private boards you need to add API token (e.g. 
+For private boards you need to add API token (e.g.
 `https://api.trello.com/1/members/{your_user_name}/boards?key={your_API_key}&token={tour_API_token}`).
 
 And you need the identifier of a list to that Githublo will write your Github issues. Get it here:
@@ -26,7 +26,7 @@ And you need the identifier of a list to that Githublo will write your Github is
 Now simply run the tool and pass all the information as command line arguments:
 
     $ sbt 'run github-user github-repository trello-board-id trello-list-id trello-api-key trello-api-token'
-    
+
 Currently Githublo is limited to 5 operations per run so it won't ruin all your Trello board.
 
 Dependencies

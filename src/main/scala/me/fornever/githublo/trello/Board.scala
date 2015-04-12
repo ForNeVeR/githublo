@@ -4,7 +4,7 @@ import java.util
 
 import scala.collection.JavaConversions._
 import me.fornever.githublo.github.Issue
-import org.trello4j.{Trello, TrelloImpl}
+import org.trello4j.core.TrelloTemplate
 
 class Board(boardId: String, listId: String, key: String, token: String) {
 
@@ -12,8 +12,9 @@ class Board(boardId: String, listId: String, key: String, token: String) {
   val maxChangesPerSession = 5
 
   def loadCards(): Stream[Card] = {
-    val trello: Trello = new TrelloImpl(key, token)
-    val cards = trello.getCardsByBoard(boardId)
+    val trello = new TrelloTemplate(key, token)
+    val board = trello.boundBoardOperations(boardId)
+    val cards = board.getCards(boardId)
     Stream(cards: _*).map(Card.from)
   }
 
@@ -41,10 +42,9 @@ class Board(boardId: String, listId: String, key: String, token: String) {
   }
 
   private def createCard(issue: Issue) {
-    val trello: Trello = new TrelloImpl(key, token)
-    val parameters = new util.HashMap[String, Object]()
-    parameters.put("due", "")
-    trello.createCard(listId, getCardName(issue), parameters)
+    val trello = new TrelloTemplate(key, token)
+    val list = trello.boundListOperations(listId)
+    list.createCard(getCardName(issue), "", "", "", "", "", "", "")
   }
 
   private def getCardName(issue: Issue): String = {

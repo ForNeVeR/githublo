@@ -28,12 +28,3 @@ Now simply run the tool and pass all the information as command line arguments:
     $ sbt 'run github-user github-repository trello-board-id trello-list-id trello-api-key trello-api-token'
 
 Currently Githublo is limited to 5 operations per run so it won't ruin all your Trello board.
-
-Dependencies
-------------
-
-Install [fork of trello4j](https://github.com/johanmynhardt/trello4j) to local Maven repository:
-
-    $ git clone https://github.com/johanmynhardt/trello4j
-    $ cd trello4j
-    $ mvn install -DskipTests

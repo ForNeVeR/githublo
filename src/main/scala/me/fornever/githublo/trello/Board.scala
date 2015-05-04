@@ -1,24 +1,16 @@
 package me.fornever.githublo.trello
 
-import java.util
-
-import scala.collection.JavaConversions._
 import me.fornever.githublo.github.Issue
-import org.trello4j.core.TrelloTemplate
 
-class Board(boardId: String, listId: String, key: String, token: String) {
+import scala.concurrent.Await
+import scala.concurrent.duration._
+
+class Board(boardId: String, listId: String) {
 
   val titleRegex = """^GH#(\d+).*$""".r
   val maxChangesPerSession = 5
 
-  def loadCards(): Stream[Card] = {
-    val trello = new TrelloTemplate(key, token)
-    val board = trello.boundBoardOperations(boardId)
-    val cards = board.getCards(boardId)
-    Stream(cards: _*).map(Card.from)
-  }
-
-  def updateCards(issues: Stream[Issue], cards: Stream[Card]): Int = {
+  def updateCards(trello: ITrelloAdapter, issues: Stream[Issue], cards: Stream[Card]): Int = {
     val cardMap = cardsByGithubId(cards)
 
     var createdCards = 0
@@ -26,7 +18,9 @@ class Board(boardId: String, listId: String, key: String, token: String) {
       cardMap.get(issue.id) match {
         case Some(card) => // TODO: Update card based on github status
         case None =>
-          createCard(issue)
+          val create = trello.createCard(listId, getCardName(issue))
+          Await.result(create, 1.minute)
+
           createdCards += 1
           if (createdCards >= maxChangesPerSession) {
             return createdCards
@@ -41,14 +35,7 @@ class Board(boardId: String, listId: String, key: String, token: String) {
     (cards map { card => (card.title, card)} collect { case (titleRegex(number), card) => (number.toInt, card)}).toMap
   }
 
-  private def createCard(issue: Issue) {
-    val trello = new TrelloTemplate(key, token)
-    val list = trello.boundListOperations(listId)
-    list.createCard(getCardName(issue), "", "", "", "", "", "", "")
-  }
-
   private def getCardName(issue: Issue): String = {
     s"GH#${issue.id}: ${issue.name}"
   }
-
 }

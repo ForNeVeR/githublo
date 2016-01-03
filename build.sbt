@@ -1,10 +1,12 @@
 seq(lessSettings: _*)
 
+seq(clojure.settings: _*)
+
 name := "githublo"
 
 version := "0.1"
 
-mainClass in (Compile, run) := Some("me.fornever.githublo.ui.FXApplication")
+mainClass in (Compile, run) := Some("me.fornever.githublo.Application")
 
 scalaVersion := "2.11.5"
 
@@ -15,7 +17,9 @@ addCompilerPlugin("org.scalamacros" % "paradise" % "2.0.1" cross CrossVersion.fu
 libraryDependencies ++= Seq(
   "com.jsuereth" %% "scala-arm" % "1.4",
   "io.trygvis.trello4j" % "trello4j" % "1.0-2013.10.19",
+  "org.clojure" % "clojure" % "1.6.0",
   "org.eclipse.mylyn.github" % "org.eclipse.egit.github.core" % "2.1.5",
   "org.scala-lang.modules" %% "scala-async" % "0.9.2",
-  "org.scalafx" %% "scalafxml-core-sfx8" % "0.2.2"
+  "org.scalafx" %% "scalafxml-core-sfx8" % "0.2.2",
+  "org.scalatest" %% "scalatest" % "2.2.1" % "test"
 )

@@ -1,5 +1,6 @@
 package me.fornever.githublo.trello
 
+import me.fornever.githublo.logic.{ListModel, CardModel}
 import org.trello4j.core.TrelloTemplate
 
 import scala.collection.JavaConversions._
@@ -9,10 +10,13 @@ class TrelloTemplateAdapter(key: String, token: String) extends ITrelloAdapter {
 
   val trello = new TrelloTemplate(key, token)
 
-  override def getCards(boardId: String): Future[Seq[Card]] = {
+  override def getCards(boardId: String): Future[Seq[CardModel]] = {
     val board = trello.boundBoardOperations(boardId)
-    val cards = board.getCards()
-    Future.successful(cards.map(convertCard))
+    val lists = board.getList().toStream
+    val cards = board.getCards().toStream
+    val listModels = lists.map(ListModel.from).map(list => (list.id.get, list)).toMap
+    val cardModels = cards.map(convertCard(listModels))
+    Future.successful(cardModels)
   }
 
   override def createCard(listId: String, name: String): Future[Unit] = {
@@ -21,5 +25,5 @@ class TrelloTemplateAdapter(key: String, token: String) extends ITrelloAdapter {
     Future.successful(Unit)
   }
 
-  private def convertCard(card: org.trello4j.model.Card) = Card(card.getName)
+  private def convertCard(lists: Map[String, ListModel])(card: org.trello4j.model.Card) = CardModel.from(card, lists)
 }

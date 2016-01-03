@@ -95,7 +95,7 @@ class SettingsFormPresenter(primaryStage: Stage,
       val properties = new Properties()
       properties.load(stream)
 
-      configuration = Configuration.loadFrom(properties)
+      configuration = Configuration.from(properties)
     }
   }(scala.concurrent.ExecutionContext.Implicits.global)
 
